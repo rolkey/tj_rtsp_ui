@@ -119,6 +119,11 @@
 }
 
 .el-table {
+  /* 表格状态色（EP 在 .el-table 上重定义同名变量，需 !important 覆盖） */
+  --el-table-border-color: #c0c4cc !important;
+  --el-table-row-hover-bg-color: #fffce8 !important;
+  --el-table-current-row-bg-color: #fce996 !important;
+
   .el-table__header-wrapper, .el-table__fixed-header-wrapper {
     th {
       word-break: break-word;
@@ -129,9 +134,14 @@
       font-size: 14px;
     }
   }
-  /* 单元格内边距（密集） */
+  /* 单元格左右内边距（密集） */
   .cell {
     padding: 0 4px !important;
+    line-height: 20px;
+  }
+  /* 单元格上下内边距（密集） */
+  .el-table__cell {
+    padding: 0 0 !important;
   }
   .el-table__body-wrapper {
     .el-button [class*="el-icon-"] + span {
@@ -162,7 +172,7 @@
   position: static !important;
   margin: 10px 0 0 0;
   padding: 0 !important;
-  
+
   .el-pagination {
     position: static;
   }
@@ -400,14 +410,14 @@
   margin: 0;
   padding: 0;
 }
-.code-action .el-button { 
-  height: 24px; 
-  font-size: 12px; 
-  padding: 4px 8px; 
+.code-action .el-button {
+  height: 24px;
+  font-size: 12px;
+  padding: 4px 8px;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid #dcdcdc;
 }
-.code-action .el-button:hover { 
+.code-action .el-button:hover {
   background: #ffffff;
   border-color: var(--el-color-primary);
 }

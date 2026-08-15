@@ -71,21 +71,16 @@ $--color-info: #909399;
   --sidebar-bg: #{$menuBg};
   --sidebar-text: #{$menuText};
   --menu-hover: #{$menuHover};
-  
+
   --navbar-bg: #ffffff;
   --navbar-text: #303133;
-  
+
   /* splitpanes default-theme 变量 */
   --splitpanes-default-bg: #ffffff;
 
   /* Element Plus 设计令牌（唐境：密集 + 小圆角） */
   --el-border-radius-base: 2px;
   --el-component-size: 28px;
-
-  /* 表格风格变量 */
-  --el-table-border-color: #dcdfe6;
-  --el-table-row-hover-bg-color: #fffce8;
-  --el-table-current-row-bg-color: #fce996;
 
 }
 
@@ -100,7 +95,7 @@ html.dark {
   --el-border-color-light: #434343;
   --el-menu-text-color: #d0d0d0;
   --sidebar-logo-text: #d0d0d0;
-  
+
   /* primary */
   --primary-bg: #18212b;
 
@@ -137,7 +132,7 @@ html.dark {
   --blockquote-bg: #1d1e1f;
   --blockquote-border: #303030;
   --blockquote-text: #d0d0d0;
-  
+
   /* Cron 时间表达式 模式变量 */
   --cron-border: #303030;
 
@@ -334,7 +329,7 @@ html.dark {
       background-color: var(--el-bg-color-overlay);
     }
   }
-  
+
   /* 下拉菜单样式覆盖 */
   .el-dropdown-menu__item:not(.is-disabled):focus, .el-dropdown-menu__item:not(.is-disabled):hover{
     background-color: var(--navbar-hover) !important;
@@ -346,7 +341,7 @@ html.dark {
     border-left-color: var(--blockquote-border) !important;
     color: var(--blockquote-text) !important;
   }
-  
+
   /* 时间表达式标题样式覆盖 */
   .popup-result .title {
     background: var(--cron-border);
