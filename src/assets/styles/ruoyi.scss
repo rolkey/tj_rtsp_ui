@@ -150,6 +150,14 @@
   }
 }
 
+/* 顶边框重影修复：EP 用 background-color 伪元素画顶线，亚像素位置易重影，改用真实 border-top */
+.el-table--border .el-table__inner-wrapper::after {
+  content: none !important;
+}
+.el-table .el-table__header-wrapper th {
+  border-top: var(--el-table-border) !important;
+}
+
 /** 表单布局 **/
 .form-header {
   font-size:15px;

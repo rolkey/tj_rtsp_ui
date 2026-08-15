@@ -64,9 +64,9 @@ export const constantRoutes = [
     children: [
       {
         path: '/index',
-        component: () => import('@/views/index'),
-        name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        component: () => import('@/views/rtsp/dashboard/index'),
+        name: 'RtspDashboard',
+        meta: { title: '监控仪表盘', icon: 'dashboard', affix: true }
       }
     ]
   },
