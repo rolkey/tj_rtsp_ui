@@ -56,7 +56,7 @@
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
-      <el-table
+      <el-table border
          v-if="refreshTable"
          v-loading="loading"
          :data="deptList"

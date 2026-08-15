@@ -10,7 +10,7 @@ $panGreen: #30B08F;
 
 // 默认主题变量
 $menuText: #bfcbd9;
-$menuActiveText: #409eff;
+$menuActiveText: #305fd9;
 $menuBg: #1a1f2e;
 $menuHover: #263445;
 
@@ -18,7 +18,7 @@ $menuHover: #263445;
 $menuLightBg: #ffffff;
 $menuLightHover: #f0f1f5;
 $menuLightText: #303133;
-$menuLightActiveText: #409EFF;
+$menuLightActiveText: #305fd9;
 
 // 基础变量
 $base-sidebar-width: 200px;
@@ -32,7 +32,7 @@ $base-sub-menu-background: #141824;
 $base-sub-menu-hover: rgba(255,255,255,.06);
 
 // 组件变量
-$--color-primary: #409EFF;
+$--color-primary: #305fd9;
 $--color-success: #67C23A;
 $--color-warning: #E6A23C;
 $--color-danger: #F56C6C;
@@ -77,6 +77,15 @@ $--color-info: #909399;
   
   /* splitpanes default-theme 变量 */
   --splitpanes-default-bg: #ffffff;
+
+  /* Element Plus 设计令牌（唐境：密集 + 小圆角） */
+  --el-border-radius-base: 2px;
+  --el-component-size: 28px;
+
+  /* 表格风格变量 */
+  --el-table-border-color: #dcdfe6;
+  --el-table-row-hover-bg-color: #fffce8;
+  --el-table-current-row-bg-color: #fce996;
 
 }
 
@@ -304,6 +313,7 @@ html.dark {
     --el-table-header-text-color: var(--el-text-color-regular) !important;
     --el-table-border-color: var(--el-border-color-light) !important;
     --el-table-row-hover-bg-color: var(--el-bg-color-overlay) !important;
+    --el-table-current-row-bg-color: var(--el-bg-color-overlay) !important;
 
     .el-table__header-wrapper, .el-table__fixed-header-wrapper {
       th {

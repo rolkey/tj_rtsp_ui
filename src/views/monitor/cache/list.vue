@@ -13,7 +13,7 @@
               @click="refreshCacheNames()"
             ></el-button>
           </template>
-          <el-table
+          <el-table border
             v-loading="loading"
             :data="cacheNames"
             :height="tableHeight"
@@ -72,7 +72,7 @@
               @click="refreshCacheKeys()"
             ></el-button>
           </template>
-          <el-table
+          <el-table border
             v-loading="subLoading"
             :data="cacheKeys"
             :height="tableHeight"
