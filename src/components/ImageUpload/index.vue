@@ -33,7 +33,7 @@
       的文件
     </div>
 
-    <el-dialog
+    <el-dialog draggable
       v-model="dialogVisible"
       title="预览"
       width="800px"
