@@ -1,6 +1,6 @@
 <template>
    <div class="app-container">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="80px">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="90px">
          <el-form-item label="监控点标识" prop="cameraIndexCode">
             <el-input
                v-model="queryParams.cameraIndexCode"
