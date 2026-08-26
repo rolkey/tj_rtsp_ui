@@ -118,6 +118,16 @@
   border-top: 1px solid var(--el-border-color-light);
 }
 
+/* 按钮风格（his-monorepo：字重 400 + 密集水平内边距 8px） */
+.el-button {
+  font-weight: 400;
+}
+.el-button:not(.el-button--small):not(.el-button--large) {
+  height: 28px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 .el-table {
   /* 表格状态色（EP 在 .el-table 上重定义同名变量，需 !important 覆盖） */
   --el-table-border-color: #c0c4cc !important;

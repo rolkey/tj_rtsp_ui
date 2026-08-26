@@ -60,7 +60,6 @@
          <el-col :span="1.5">
             <el-button
                type="danger"
-               plain
                icon="Delete"
                :disabled="multiple"
                @click="handleDelete"
@@ -70,7 +69,6 @@
          <el-col :span="1.5">
             <el-button
                type="danger"
-               plain
                icon="Delete"
                @click="handleClean"
                v-hasPermi="['monitor:job:remove']"
@@ -79,7 +77,6 @@
          <el-col :span="1.5">
             <el-button
                type="warning"
-               plain
                icon="Download"
                @click="handleExport"
                v-hasPermi="['monitor:job:export']"
@@ -88,7 +85,6 @@
          <el-col :span="1.5">
             <el-button 
                type="warning" 
-               plain 
                icon="Close"
                @click="handleClose"
             >关闭</el-button>

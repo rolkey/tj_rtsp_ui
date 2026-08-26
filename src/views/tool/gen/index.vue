@@ -39,7 +39,6 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          plain
           icon="Download"
           :disabled="multiple"
           @click="handleGenTable"
@@ -49,7 +48,6 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          plain
           icon="Plus"
           @click="openCreateTable"
           v-hasRole="['admin']"
@@ -58,7 +56,6 @@
       <el-col :span="1.5">
         <el-button
           type="info"
-          plain
           icon="Upload"
           @click="openImportTable"
           v-hasPermi="['tool:gen:import']"
@@ -67,7 +64,6 @@
       <el-col :span="1.5">
         <el-button
           type="success"
-          plain
           icon="Edit"
           :disabled="single"
           @click="handleEditTable"
@@ -77,7 +73,6 @@
       <el-col :span="1.5">
         <el-button
           type="danger"
-          plain
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"

@@ -30,7 +30,6 @@
          <el-col :span="1.5">
             <el-button
                type="primary"
-               plain
                icon="Plus"
                @click="openSelectUser"
                v-hasPermi="['system:role:add']"
@@ -39,7 +38,6 @@
          <el-col :span="1.5">
             <el-button
                type="danger"
-               plain
                icon="CircleClose"
                :disabled="multiple"
                @click="cancelAuthUserAll"
@@ -49,7 +47,6 @@
          <el-col :span="1.5">
             <el-button 
                type="warning" 
-               plain 
                icon="Close"
                @click="handleClose"
             >关闭</el-button>

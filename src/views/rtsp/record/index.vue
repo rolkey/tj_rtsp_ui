@@ -31,7 +31,6 @@
          <el-col :span="1.5">
             <el-button
                type="warning"
-               plain
                icon="Refresh"
                @click="handleQuery"
             >刷新</el-button>

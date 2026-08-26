@@ -16,3 +16,19 @@ export function delFace(imageId) {
     method: 'delete'
   })
 }
+
+// 手动推送人脸记录
+export function pushFace(imageIds) {
+  return request({
+    url: '/rtsp/face/push/' + imageIds,
+    method: 'post'
+  })
+}
+
+// 查询推送日志
+export function getPushLog(imageId) {
+  return request({
+    url: '/rtsp/face/pushLog/' + imageId,
+    method: 'get'
+  })
+}

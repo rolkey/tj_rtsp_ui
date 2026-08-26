@@ -30,7 +30,6 @@
          <el-col :span="1.5">
             <el-button
                type="primary"
-               plain
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:menu:add']"
@@ -39,7 +38,6 @@
          <el-col :span="1.5">
             <el-button
                type="warning"
-               plain
                icon="Check"
                @click="handleSaveSort"
                v-hasPermi="['system:menu:edit']"
@@ -48,7 +46,6 @@
          <el-col :span="1.5">
             <el-button 
                type="info"
-               plain
                icon="Sort"
                @click="toggleExpandAll"
             >展开/折叠</el-button>

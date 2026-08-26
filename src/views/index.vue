@@ -16,13 +16,11 @@
           <el-button
             type="primary"
             icon="Cloudy"
-            plain
             @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"
             >访问码云</el-button
           >
           <el-button
             icon="HomeFilled"
-            plain
             @click="goTarget('http://ruoyi.vip')"
             >访问主页</el-button
           >

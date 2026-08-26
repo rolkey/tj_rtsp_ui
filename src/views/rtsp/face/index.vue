@@ -59,8 +59,16 @@
       <el-row :gutter="10" class="mb8">
          <el-col :span="1.5">
             <el-button
+               type="primary"
+               icon="Position"
+               :disabled="multiple"
+               @click="handlePush"
+               v-hasPermi="['rtsp:face:push']"
+            >推送</el-button>
+         </el-col>
+         <el-col :span="1.5">
+            <el-button
                type="danger"
-               plain
                icon="Delete"
                :disabled="multiple"
                @click="handleDelete"
@@ -70,7 +78,6 @@
          <el-col :span="1.5">
             <el-button
                type="warning"
-               plain
                icon="Refresh"
                @click="handleQuery"
             >刷新</el-button>
@@ -116,20 +123,50 @@
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
+         <el-table-column label="操作" align="center" width="140">
+            <template #default="scope">
+               <el-button
+                  v-if="scope.row.pushStatus === '2' || scope.row.pushStatus === '3'"
+                  link
+                  type="primary"
+                  icon="Position"
+                  @click="handlePush(scope.row)"
+                  v-hasPermi="['rtsp:face:push']"
+               >推送</el-button>
+               <el-button
+                  link
+                  type="primary"
+                  icon="Document"
+                  @click="handlePushLog(scope.row)"
+                  v-hasPermi="['rtsp:face:query']"
+               >日志</el-button>
+            </template>
+         </el-table-column>
       </el-table>
 
-      <pagination
-         v-show="total > 0"
-         :total="total"
-         v-model:page="queryParams.pageNum"
-         v-model:limit="queryParams.pageSize"
-         @pagination="getList"
-      />
+       <pagination
+          v-show="total > 0"
+          :total="total"
+          v-model:page="queryParams.pageNum"
+          v-model:limit="queryParams.pageSize"
+          @pagination="getList"
+       />
+
+       <el-dialog title="推送日志" v-model="pushLogOpen" width="900px" append-to-body>
+          <el-table v-loading="pushLogLoading" border :data="pushLogList">
+             <el-table-column label="推送时间" align="center" prop="pushTime" width="160"><template #default="scope">{{ parseTime(scope.row.pushTime) }}</template></el-table-column>
+             <el-table-column label="推送类型" align="center" prop="pushType" width="90"><template #default="scope">{{ scope.row.pushType === '0' ? '自动' : '手动' }}</template></el-table-column>
+             <el-table-column label="推送结果" align="center" prop="pushStatus" width="90"><template #default="scope"><el-tag :type="scope.row.pushStatus === '0' ? 'success' : 'danger'">{{ scope.row.pushStatus === '0' ? '成功' : '失败' }}</el-tag></template></el-table-column>
+             <el-table-column label="响应码" align="center" prop="responseCode" width="80" />
+             <el-table-column label="耗时(ms)" align="center" prop="costMs" width="90" />
+             <el-table-column label="失败原因" align="center" prop="errorMsg" :show-overflow-tooltip="true" />
+          </el-table>
+       </el-dialog>
    </div>
 </template>
 
 <script setup name="RtspFace">
-import { listFace, delFace } from "@/api/rtsp/face"
+import { listFace, delFace, pushFace, getPushLog } from "@/api/rtsp/face"
 
 const { proxy } = getCurrentInstance()
 
@@ -141,6 +178,9 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 const dateRange = ref([])
+const pushLogOpen = ref(false)
+const pushLogList = ref([])
+const pushLogLoading = ref(false)
 
 // 上传状态选项
 const uploadStatusOptions = [
@@ -220,6 +260,27 @@ function handleDelete(row) {
     getList()
     proxy.$modal.msgSuccess("删除成功")
   }).catch(() => {})
+}
+
+/** 推送按钮操作 */
+function handlePush(row) {
+  const imageIds = row.imageId || ids.value
+  proxy.$modal.confirm('是否确认推送选中的记录？').then(function () {
+    return pushFace(imageIds)
+  }).then(res => {
+    proxy.$modal.msgSuccess(res.msg || '推送完成')
+    getList()
+  }).catch(() => {})
+}
+
+/** 推送日志按钮操作 */
+function handlePushLog(row) {
+  pushLogOpen.value = true
+  pushLogLoading.value = true
+  getPushLog(row.imageId).then(res => {
+    pushLogList.value = res.data || []
+    pushLogLoading.value = false
+  })
 }
 
 getList()

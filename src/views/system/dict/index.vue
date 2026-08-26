@@ -54,7 +54,6 @@
          <el-col :span="1.5">
             <el-button
                type="primary"
-               plain
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:dict:add']"
@@ -63,7 +62,6 @@
          <el-col :span="1.5">
             <el-button
                type="success"
-               plain
                icon="Edit"
                :disabled="single"
                @click="handleUpdate"
@@ -73,7 +71,6 @@
          <el-col :span="1.5">
             <el-button
                type="danger"
-               plain
                icon="Delete"
                :disabled="multiple"
                @click="handleDelete"
@@ -83,7 +80,6 @@
          <el-col :span="1.5">
             <el-button
                type="warning"
-               plain
                icon="Download"
                @click="handleExport"
                v-hasPermi="['system:dict:export']"
@@ -92,7 +88,6 @@
          <el-col :span="1.5">
             <el-button
                type="danger"
-               plain
                icon="Refresh"
                @click="handleRefreshCache"
                v-hasPermi="['system:dict:remove']"
