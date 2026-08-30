@@ -104,7 +104,7 @@
 
       <!-- 添加或修改摄像头对话框 -->
       <el-dialog draggable :title="title" v-model="open" width="680px" append-to-body>
-         <el-form ref="cameraRef" :model="form" :rules="rules" label-width="100px">
+         <el-form ref="cameraRef" :model="form" :rules="rules" label-width="120px">
             <el-row>
                <el-col :span="12">
                   <el-form-item label="设备名称" prop="cameraName">
