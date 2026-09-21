@@ -17,6 +17,14 @@ export function getCamera(cameraId) {
   })
 }
 
+// 根据监控点唯一标识查询摄像头详细
+export function getCameraByIndexCode(cameraIndexCode) {
+  return request({
+    url: '/rtsp/camera/byIndexCode/' + cameraIndexCode,
+    method: 'get'
+  })
+}
+
 // 新增摄像头
 export function addCamera(data) {
   return request({

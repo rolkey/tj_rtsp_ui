@@ -69,6 +69,12 @@
          <el-table-column label="监控点标识" align="center" prop="cameraIndexCode" :show-overflow-tooltip="true" />
          <el-table-column label="设备编码" align="center" prop="devCode" :show-overflow-tooltip="true" />
          <el-table-column label="安装位置" align="center" prop="location" :show-overflow-tooltip="true" />
+         <el-table-column label="设备IP" align="center" prop="deviceIp" :show-overflow-tooltip="true" />
+         <el-table-column label="设备厂家" align="center" prop="manufacturer">
+            <template #default="scope">
+               <dict-tag :options="rtsp_device_manufacturer" :value="scope.row.manufacturer" />
+            </template>
+         </el-table-column>
          <el-table-column label="RTSP地址" align="center" prop="streamUrl" :show-overflow-tooltip="true" />
          <el-table-column label="状态" align="center" prop="status" width="100">
             <template #default="scope">
@@ -126,6 +132,38 @@
                      <el-input v-model="form.location" placeholder="请输入安装位置" />
                   </el-form-item>
                </el-col>
+               <el-col :span="12">
+                  <el-form-item label="设备厂家" prop="manufacturer">
+                     <el-select v-model="form.manufacturer" placeholder="请选择设备厂家" clearable>
+                        <el-option
+                           v-for="dict in rtsp_device_manufacturer"
+                           :key="dict.value"
+                           :label="dict.label"
+                           :value="dict.value"
+                        />
+                     </el-select>
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item label="设备IP" prop="deviceIp">
+                     <el-input v-model="form.deviceIp" placeholder="请输入设备IP" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item label="设备端口" prop="devicePort">
+                     <el-input v-model="form.devicePort" placeholder="请输入设备端口" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item label="设备账号" prop="username">
+                     <el-input v-model="form.username" placeholder="请输入设备账号" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item label="设备密码" prop="password">
+                     <el-input v-model="form.password" type="password" show-password placeholder="请输入设备密码" />
+                  </el-form-item>
+               </el-col>
                <el-col :span="24">
                   <el-form-item label="RTSP基础地址" prop="rtspBaseUrl">
                      <el-input v-model="form.rtspBaseUrl" placeholder="请输入RTSP基础地址" />
@@ -168,6 +206,7 @@
 import { listCamera, getCamera, delCamera, addCamera, updateCamera } from "@/api/rtsp/camera"
 
 const { proxy } = getCurrentInstance()
+const { rtsp_device_manufacturer } = useDict("rtsp_device_manufacturer")
 
 const cameraList = ref([])
 const open = ref(false)
@@ -226,6 +265,11 @@ function reset() {
     cameraIndexCode: undefined,
     devCode: undefined,
     location: undefined,
+    manufacturer: undefined,
+    deviceIp: undefined,
+    devicePort: undefined,
+    username: undefined,
+    password: undefined,
     rtspBaseUrl: undefined,
     streamUrl: undefined,
     status: "0",
