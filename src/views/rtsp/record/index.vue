@@ -71,6 +71,11 @@
                <span>{{ parseTime(scope.row.recordDate, '{y}-{m}-{d}') }}</span>
             </template>
          </el-table-column>
+         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="100">
+            <template #default="scope">
+               <el-button link type="primary" icon="VideoPlay" @click="handlePlayback(scope.$index)" v-hasPermi="['rtsp:record:query']">回放</el-button>
+            </template>
+         </el-table-column>
       </el-table>
 
       <pagination
@@ -80,11 +85,14 @@
          v-model:limit="queryParams.pageSize"
          @pagination="getList"
       />
+
+      <playback-dialog v-model:visible="playbackVisible" :segments="recordList" :start-index="playbackIndex" />
    </div>
 </template>
 
 <script setup name="RtspRecord">
 import { listRecord } from "@/api/rtsp/record"
+import PlaybackDialog from "./PlaybackDialog"
 
 const { proxy } = getCurrentInstance()
 
@@ -93,6 +101,8 @@ const loading = ref(true)
 const showSearch = ref(true)
 const total = ref(0)
 const dateRange = ref([])
+const playbackVisible = ref(false)
+const playbackIndex = ref(0)
 
 // 锁定类型标签映射
 const lockTypeMap = {
@@ -141,6 +151,12 @@ function formatSize(size) {
 /** 复制成功回调 */
 function copyTextSuccess() {
   proxy.$modal.msgSuccess("复制成功")
+}
+
+/** 打开录像回放弹窗 */
+function handlePlayback(index) {
+  playbackIndex.value = index
+  playbackVisible.value = true
 }
 
 getList()

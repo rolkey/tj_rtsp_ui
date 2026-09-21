@@ -47,7 +47,7 @@
 | UI config | `src/settings.js` | sideTheme, navType, tagsView, fixedHeader |
 | Env vars | `.env.*` | VITE_APP_TITLE, VITE_APP_BASE_API, VITE_BUILD_COMPRESS |
 | Vite plugins | `vite/plugins/` | auto-import, svg-icons, compression, setup-extend |
-| New RTSP pages | `src/views/` (new dir), `src/api/` (new module) | Planned, not yet implemented |
+| New RTSP pages | `src/views/rtsp/` + `src/api/rtsp/` | 见下方 "RTSP FEATURES & OPERATION FLOW" |
 
 ## CODE MAP
 
@@ -63,6 +63,79 @@
 | `getToken` / `setToken` | Util | `src/utils/auth.js` | Cookie-based JWT management |
 | `Layout` | Component | `src/layout/index.vue` | Admin shell wrapper |
 | `isRelogin` | Export | `src/utils/request.js` | Re-login guard flag |
+
+## RTSP FEATURES & OPERATION FLOW
+
+RTSP 监控子系统前端 — 4 个页面（`src/views/rtsp/`）+ 4 个 API 模块（`src/api/rtsp/`），全部由后端 `sys_menu` 菜单数据驱动路由（无需手动编辑 `router/index.js`）。
+
+### 页面概览
+
+| 页面 | 路径 | API 模块 | 权限前缀 | 性质 |
+|------|------|----------|----------|------|
+| 监控仪表盘 | `views/rtsp/dashboard/index.vue` | `api/rtsp/dashboard.js` | `rtsp:dashboard:view` | 只读，默认首页 |
+| 设备管理 | `views/rtsp/camera/index.vue` | `api/rtsp/camera.js` | `rtsp:camera:*` | CRUD |
+| 人脸记录 | `views/rtsp/face/index.vue` | `api/rtsp/face.js` | `rtsp:face:*` | 查询 + 手动推送 |
+| 录像回放 | `views/rtsp/record/index.vue` | `api/rtsp/record.js` | `rtsp:record:*` | 只读查询 |
+
+### 各页面功能与操作流程
+
+#### 1. 监控仪表盘（`dashboard/index.vue`）
+**功能**: 4 统计卡片 + ECharts 上传趋势图 + 最近上传列表 + 摄像头维度统计表
+
+**操作流程**:
+1. 登录后进入仪表盘（后端菜单设为默认首页 `is_cache=1`）
+2. 挂载时并行调用 `summary` / `uploadTrend` / `recent` / `cameraStats` 四个接口
+3. 统计卡片每 30 秒自动刷新（`setInterval`）
+4. 点击"最近上传"列表缩略图 → 弹窗查看大图
+5. 点击"摄像头统计"某行 → 跳转人脸记录页并自动按该摄像头筛选（`query` 参数传递）
+
+**接口映射**: `/rtsp/dashboard/summary`、`/upload-trend?days=7`、`/recent?limit=20`、`/camera-stats`
+
+#### 2. 设备管理（`camera/index.vue`）
+**功能**: 摄像头 CRUD + 启停用 + 导出（参考 `views/system/notice/index.vue` 模式）
+
+**操作流程**:
+1. 搜索区筛选（设备名称 / 监控点标识 / 设备编码 / 状态）
+2. 表格列：名称、监控点标识、设备编码、安装位置、RTSP URL、状态 Tag、最近上传时间、累计上传次数、创建时间、操作
+3. 新增 / 编辑：弹窗表单（含 RTSP 基础 URL、流 URL 模板字段）
+4. 删除：`$modal.confirm` 二次确认，支持批量
+5. 启用 / 停用：状态开关（`changeStatus`）
+6. 导出：`download('rtsp/camera/export', ...)`
+
+**接口映射**: `/rtsp/camera/list`、`/{id}`、`POST/PUT /rtsp/camera`、`DELETE /{ids}`、`/export`
+
+#### 3. 人脸记录（`face/index.vue`）— 核心页面
+**功能**: 人脸图片查询 + **手动推送（单条/批量）** + 推送日志查看 + 图片预览
+
+**操作流程**:
+1. 搜索区筛选：监控点标识/设备编码（模糊）、上传状态、**推送状态**、时间范围
+2. 表格列：复选框、摄像头名称（关联查询）、人脸缩略图、全景缩略图、上传状态 Tag、**推送状态 Tag**、最近推送时间、推送重试次数、失败原因（tooltip）、操作
+3. 点击缩略图 → 弹窗并排查看人脸图 + 全景图
+4. **批量推送**：勾选多条 → 工具栏"批量推送"按钮（对 `push_status IN ('2','3')` 记录，`v-hasPermi="['rtsp:face:push']"`）
+5. **单条推送**：行内按钮（仅 `push_status=2 或 3` 显示），二次确认
+6. **推送日志**：行内按钮 → 弹窗展示 `rtsp_push_log` 表内容
+7. 删除：二次确认，同时删文件 + DB 记录
+
+**推送状态 Tag 颜色**: `0`待推送=灰、`1`已推送=绿、`2`失败=红、`3`放弃推送=橙
+
+**接口映射**: `/rtsp/face/list`、`/push/{ids}`、`/pushLog/{id}`、`/image/{id}/{type}`、`DELETE /{ids}`
+
+#### 4. 录像回放（`record/index.vue`）
+**功能**: 录像片段查询（纯只读）
+
+**操作流程**:
+1. 搜索区筛选：监控点标识、时间范围
+2. 表格列：监控点标识、开始时间、结束时间、片段大小（格式化 MB）、锁定类型、RTSP URL、操作
+3. 复制 RTSP URL（`v-clipboard` + `el-tooltip`）
+4. 查看详情弹窗
+
+**接口映射**: `/rtsp/record/list`
+
+### 路由说明
+
+- 采用**后端菜单驱动**（标准 RuoYi 模式）：后端 `sys_menu` 表 `component` 字段设为 `rtsp/dashboard/index` 等，前端 `permission.js` → `permission store` → `import.meta.glob('./../../views/**/*.vue')` 自动解析
+- `dynamicRoutes` **无需新增**（RTSP 页面均由后端 menu 数据驱动，非 `constantRoutes`/`dynamicRoutes` 静态声明）
+- 图片缩略图通过 `GET /rtsp/face/image/{imageId}/{type}` 加载（`type`: `face` / `scene`），建议懒加载 + HTTP 缓存头
 
 ## CONVENTIONS
 
@@ -128,7 +201,7 @@ pnpm preview              # Preview production build
 
 ## NOTES
 
-- **No RTSP code exists yet.** README says "唐境：rtsp前端" but src/ is stock RuoYi. RTSP features are planned.
+- **RTSP 功能规划**: 4 页面（仪表盘/设备/人脸/录像）+ 4 API 模块，功能与操作流程见 "RTSP FEATURES & OPERATION FLOW" 章节。`src/` 目前仍是 stock RuoYi，RTSP 页面待实现。
 - **Single git commit** (583784c). Working tree has only line-ending diffs (CRLF↔LF) — source is identical to upstream.
 - **No CI/CD**, no Docker config in this repo. Backend sibling `tj_rtsp/` has docker-compose (MySQL dev DB).
 - **jsencrypt.js** contains a hardcoded RSA private key in the frontend — the login encryption is security theater.
